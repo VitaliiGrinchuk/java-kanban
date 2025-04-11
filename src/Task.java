@@ -14,19 +14,15 @@ public class Task {
     public int getId() {
         return id;
     }
-
     public Status getStatus() {
         return status;
     }
-
     public void setStatus(Status status) {
         this.status = status;
     }
-
     public String getTitle() {
         return title;
     }
-
     public String getDescription() {
         return description;
     }
@@ -42,9 +38,9 @@ public class Task {
     public int hashCode() {
         return Integer.hashCode(id);
     }
-
     @Override
     public String toString() {
-        return id + ". " + title + " [" + status + "] : " + description;
+        return id + ". " + title + " [" + status + "]: " + description;
     }
 }
+
