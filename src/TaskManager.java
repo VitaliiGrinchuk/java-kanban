@@ -47,14 +47,14 @@ public class TaskManager {
 
     public int addNewTask(Task task) {
         int id = generateId();
-        task.id = id;
+        task.setId(id);
         tasks.put(id, task);
         return id;
     }
 
     public int addNewEpic(Epic epic) {
         int id = generateId();
-        epic.id = id;
+        epic.setId(id);
         epics.put(id, epic);
         return id;
     }
@@ -63,7 +63,7 @@ public class TaskManager {
         Epic epic = epics.get(subtask.getEpicId());
         if (epic == null) return -1;
         int id = generateId();
-        subtask.id = id;
+        subtask.setId(id);
         subtasks.put(id, subtask);
         epic.addSubtaskId(id);
         updateEpicStatus(epic.getId());
