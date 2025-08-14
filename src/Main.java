@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 public class Main {
-    private static final TaskManager manager = new TaskManager();
+    private static final TaskManager manager = Managers.getDefault();
     private static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {

@@ -13,6 +13,7 @@ public class Epic extends Task {
     }
 
     public void addSubtaskId(int id) {
+        if (id == this.id) return;
         subtaskIds.add(id);
     }
 
