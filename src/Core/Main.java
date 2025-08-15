@@ -1,3 +1,10 @@
+package Core;
+
+import Model.Epic;
+import Model.Status;
+import Model.Subtask;
+import Model.Task;
+
 import java.util.Scanner;
 
 public class Main {
@@ -69,7 +76,7 @@ public class Main {
     }
 
     private static void addTask() {
-        System.out.println("Тип (1-Task, 2-Epic, 3-Subtask):");
+        System.out.println("Тип (1-Model.Task, 2-Model.Epic, 3-Model.Subtask):");
         int type = Integer.parseInt(scanner.nextLine());
         System.out.println("Название:");
         String title = scanner.nextLine();

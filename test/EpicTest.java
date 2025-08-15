@@ -1,4 +1,12 @@
 import static org.junit.jupiter.api.Assertions.*;
+
+import Core.HistoryManager;
+import Core.Managers;
+import Core.TaskManager;
+import Model.Epic;
+import Model.Status;
+import Model.Subtask;
+import Model.Task;
 import org.junit.jupiter.api.Test;
 import java.util.List;
 
@@ -11,19 +19,19 @@ class EpicTest {
     }
     @Test
     void testEpicCantBeItsOwnSubtask() {
-        Epic epic = new Epic(1, "Epic", "desc");
+        Epic epic = new Epic(1, "Model.Epic", "desc");
         epic.addSubtaskId(1);
-        assertFalse(epic.getSubtaskIds().contains(epic.getId()), "Epic can't be its own subtask");
+        assertFalse(epic.getSubtaskIds().contains(epic.getId()), "Model.Epic can't be its own subtask");
     }
     @Test
     void testSubtaskCantBeItsOwnEpic() {
         Subtask subtask = new Subtask(2, "sub", "desc", Status.NEW, 1);
-        assertNotEquals(subtask.getId(), subtask.getEpicId(), "Subtask can't be its own epic");
+        assertNotEquals(subtask.getId(), subtask.getEpicId(), "Model.Subtask can't be its own epic");
     }
     @Test
     void testManagersGetDefault() {
         TaskManager tm = Managers.getDefault();
-        assertNotNull(tm, "Managers.getDefault() returned null");
+        assertNotNull(tm, "Core.Managers.getDefault() returned null");
     }
     @Test
     void testAddAndFindTaskById() {

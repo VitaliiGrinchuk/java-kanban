@@ -1,3 +1,5 @@
+package Core;
+
 public final class Managers {
     private Managers() {}
 
