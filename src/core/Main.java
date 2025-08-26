@@ -105,7 +105,7 @@ public class Main {
                 }
                 Subtask subtask = new Subtask(0, title, desc, status, epicId);
                 int subtaskId = manager.addNewSubtask(subtask);
-                System.out.println(subtaskId != -1 ? "Создана подзадача id=" + subtaskId :"Ошибка создания подзадачи");
+                System.out.println(subtaskId != -1 ? "Создана подзадача id=" + subtaskId : "Ошибка создания подзадачи");
                 break;
             default:
                 System.out.println("Ошибка типа задачи");
