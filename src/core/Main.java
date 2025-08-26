@@ -1,9 +1,9 @@
-package Core;
+package core;
 
-import Model.Epic;
-import Model.Status;
-import Model.Subtask;
-import Model.Task;
+import model.Epic;
+import model.Status;
+import model.Subtask;
+import model.Task;
 
 import java.util.Scanner;
 

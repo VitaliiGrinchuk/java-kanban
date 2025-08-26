@@ -1,13 +1,13 @@
 import static org.junit.jupiter.api.Assertions.*;
 
-import Core.HistoryManager;
-import Core.InMemoryHistoryManager;
-import Core.Managers;
-import Core.TaskManager;
-import Model.Epic;
-import Model.Status;
-import Model.Subtask;
-import Model.Task;
+import core.HistoryManager;
+import core.InMemoryHistoryManager;
+import core.Managers;
+import core.TaskManager;
+import model.Epic;
+import model.Status;
+import model.Subtask;
+import model.Task;
 import org.junit.jupiter.api.Test;
 import java.util.List;
 

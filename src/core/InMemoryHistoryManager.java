@@ -1,5 +1,5 @@
-package Core;
-import Model.Task;
+package core;
+import model.Task;
 import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {

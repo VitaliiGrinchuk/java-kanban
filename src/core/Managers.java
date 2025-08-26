@@ -1,4 +1,4 @@
-package Core;
+package core;
 
 public final class Managers {
     private Managers() {}
