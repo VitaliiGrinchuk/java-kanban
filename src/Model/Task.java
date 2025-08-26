@@ -12,7 +12,13 @@ public class Task {
         this.description = description;
         this.status = status;
     }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
     public void setId(int id) {
         this.id = id;
     }
