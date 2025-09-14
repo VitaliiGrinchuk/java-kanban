@@ -1,6 +1,6 @@
-package Core;
+package core;
 
-import Model.Task;
+import model.Task;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +21,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     public List<Task> getHistory() {
         return new ArrayList<>(history);
     }
+
     @Override
     public void remove(int id) {
         history.removeIf(task -> task.getId() == id);

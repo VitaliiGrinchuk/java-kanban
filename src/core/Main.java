@@ -1,9 +1,10 @@
-package Core;
+package core;
 
-import Model.Epic;
-import Model.Status;
-import Model.Subtask;
-import Model.Task;
+import model.Epic;
+import model.Status;
+import model.Subtask;
+import model.Task;
+import java.io.File;
 
 import java.util.Scanner;
 
@@ -44,6 +45,9 @@ public class Main {
                 case 9:
                     getEpicSubtasks();
                     break;
+                case 10:
+                    fileManagerDemo();
+                    break;
                 case 0:
                     System.out.println("Выход");
                     return;
@@ -63,6 +67,7 @@ public class Main {
         System.out.println("7 - Удалить задачу по ID");
         System.out.println("8 - Удалить все задачи");
         System.out.println("9 - Подзадачи эпика");
+        System.out.println("10 - Демонтрация файлового менеджера");
         System.out.println("0 - Выход");
     }
 
@@ -105,7 +110,7 @@ public class Main {
                 }
                 Subtask subtask = new Subtask(0, title, desc, status, epicId);
                 int subtaskId = manager.addNewSubtask(subtask);
-                System.out.println(subtaskId != -1 ? "Создана подзадача id=" + subtaskId :"Ошибка создания подзадачи");
+                System.out.println(subtaskId != -1 ? "Создана подзадача id=" + subtaskId : "Ошибка создания подзадачи");
                 break;
             default:
                 System.out.println("Ошибка типа задачи");
@@ -168,5 +173,53 @@ public class Main {
         System.out.println("Введите ID эпика:");
         int epicId = Integer.parseInt(scanner.nextLine());
         System.out.println(manager.getEpicSubtasks(epicId));
+    }
+
+    private static void fileManagerDemo() {
+
+        File file = new File("tasks.csv");
+
+        FileBackedTaskManager manager = new FileBackedTaskManager(file);
+
+        // Создаём разные типы задач
+        Task task1 = new Task(0, "Простая задача", "Описание простой задачи", Status.NEW);
+        Task task2 = new Task(0, "Вторая задача", "Описание второй задачи", Status.DONE);
+
+        Epic epic1 = new Epic(0, "Эпик с подзадачами", "Описание эпика");
+        Epic epic2 = new Epic(0, "Пустой эпик", "Эпик без подзадач");
+
+        int taskId1 = manager.addNewTask(task1);
+        int taskId2 = manager.addNewTask(task2);
+        int epicId1 = manager.addNewEpic(epic1);
+        int epicId2 = manager.addNewEpic(epic2);
+
+        Subtask sub1 = new Subtask(0, "Подзадача 1", "Первая подзадача эпика", Status.NEW, epicId1);
+        Subtask sub2 = new Subtask(0, "Подзадача 2", "Вторая подзадача эпика", Status.DONE, epicId1);
+        Subtask sub3 = new Subtask(0, "Подзадача 3", "Третья подзадача эпика", Status.INPROGRESS, epicId1);
+
+        manager.addNewSubtask(sub1);
+        manager.addNewSubtask(sub2);
+        manager.addNewSubtask(sub3);
+
+        System.out.println("Создали задачи в первом менеджере:");
+        System.out.println("Задачи: " + manager.getTasks().size());
+        System.out.println("Эпики: " + manager.getEpics().size());
+        System.out.println("Подзадачи: " + manager.getSubtasks().size());
+
+        FileBackedTaskManager newManager = FileBackedTaskManager.loadFromFile(file);
+
+        System.out.println("\nЗагрузили задачи во второй менеджер:");
+        System.out.println("Задачи: " + newManager.getTasks().size());
+        System.out.println("Эпики: " + newManager.getEpics().size());
+        System.out.println("Подзадачи: " + newManager.getSubtasks().size());
+
+        // Проверяем, что все задачи на месте
+        System.out.println("\nПроверяем задачи:");
+        System.out.println("Задача 1: " + newManager.getTask(taskId1).getTitle());
+        System.out.println("Задача 2: " + newManager.getTask(taskId2).getTitle());
+        System.out.println("Эпик 1: " + newManager.getEpic(epicId1).getTitle());
+        System.out.println("Эпик 2: " + newManager.getEpic(epicId2).getTitle());
+        System.out.println("Подзадачи эпика 1: " + newManager.getEpicSubtasks(epicId1).size());
+        System.out.println("Подзадачи эпика 2: " + newManager.getEpicSubtasks(epicId2).size());
     }
 }
