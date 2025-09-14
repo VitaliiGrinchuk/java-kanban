@@ -46,7 +46,7 @@ public class Main {
                     getEpicSubtasks();
                     break;
                 case 10:
-                    FileManagerDemo();
+                    fileManagerDemo();
                     break;
                 case 0:
                     System.out.println("Выход");
@@ -110,7 +110,7 @@ public class Main {
                 }
                 Subtask subtask = new Subtask(0, title, desc, status, epicId);
                 int subtaskId = manager.addNewSubtask(subtask);
-                System.out.println(subtaskId != -1 ? "Создана подзадача id=" + subtaskId :"Ошибка создания подзадачи");
+                System.out.println(subtaskId != -1 ? "Создана подзадача id=" + subtaskId : "Ошибка создания подзадачи");
                 break;
             default:
                 System.out.println("Ошибка типа задачи");
@@ -174,7 +174,8 @@ public class Main {
         int epicId = Integer.parseInt(scanner.nextLine());
         System.out.println(manager.getEpicSubtasks(epicId));
     }
-    private static void FileManagerDemo(){
+    private static void fileManagerDemo() {
+
         File file = new File("tasks.csv");
 
         FileBackedTaskManager manager = new FileBackedTaskManager(file);
