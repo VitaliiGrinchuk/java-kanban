@@ -1,4 +1,4 @@
-package Core;
+package core;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
@@ -6,12 +6,11 @@ import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.*;
 import java.io.File;
 import java.io.IOException;
-import Core.FileBackedTaskManager;
-import Core.ManagerSaveException;
-import Model.Task;
-import Model.Epic;
-import Model.Subtask;
-import Model.Status;
+
+import model.Task;
+import model.Epic;
+import model.Subtask;
+import model.Status;
 
 class FileBackedTaskManagerTest {
     private File tempFile;
