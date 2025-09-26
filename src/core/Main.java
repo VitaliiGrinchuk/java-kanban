@@ -1,9 +1,9 @@
-package Core;
+package core;
 
-import Model.Epic;
-import Model.Status;
-import Model.Subtask;
-import Model.Task;
+import model.Epic;
+import model.Status;
+import model.Subtask;
+import model.Task;
 
 import java.util.Scanner;
 
@@ -105,7 +105,7 @@ public class Main {
                 }
                 Subtask subtask = new Subtask(0, title, desc, status, epicId);
                 int subtaskId = manager.addNewSubtask(subtask);
-                System.out.println(subtaskId != -1 ? "Создана подзадача id=" + subtaskId :"Ошибка создания подзадачи");
+                System.out.println(subtaskId != -1 ? "Создана подзадача id=" + subtaskId : "Ошибка создания подзадачи");
                 break;
             default:
                 System.out.println("Ошибка типа задачи");
@@ -168,5 +168,8 @@ public class Main {
         System.out.println("Введите ID эпика:");
         int epicId = Integer.parseInt(scanner.nextLine());
         System.out.println(manager.getEpicSubtasks(epicId));
+        System.out.println("Эпик получен!");
     }
 }
+//пишу этот комментарий, так как слегка накосячил с версиями в гите(задание делал на другой машине на работе и залил всё в основную ветку) а в пачке я вас не нашёл.
+//в следующем ФЗ я этот комментарий уберу
