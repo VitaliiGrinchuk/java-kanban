@@ -51,17 +51,14 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             List<String> lines = new ArrayList<>();
             lines.add("id,type,name,status,description,epic,duration,startTime"); // ОБНОВЛЕННЫЙ заголовок
 
-            // Сохраняем обычные задачи
             for (Task task : getTasks()) {
                 lines.add(toString(task));
             }
 
-            // Сохраняем эпики
             for (Epic epic : getEpics()) {
                 lines.add(toString(epic));
             }
 
-            // Сохраняем подзадачи
             for (Subtask subtask : getSubtasks()) {
                 lines.add(toString(subtask));
             }
@@ -79,13 +76,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             epicId = String.valueOf(((Subtask) task).getEpicId());
         }
 
-        // Преобразуем Duration в минуты (или пустая строка если null)
         String durationStr = "";
         if (task.getDuration() != null) {
             durationStr = String.valueOf(task.getDuration().toMinutes());
         }
 
-        // Преобразуем LocalDateTime в строку (или пустая строка если null)
         String startTimeStr = "";
         if (task.getStartTime() != null) {
             startTimeStr = task.getStartTime().toString();
@@ -195,15 +190,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         String name = parts[2];
         Status status = Status.valueOf(parts[3]);
         String description = parts[4];
-        String epicIdStr = parts[5];
 
-        // Парсим duration (если не пустая строка)
+        String epicIdStr = (parts.length > 5) ? parts[5] : "";
         Duration duration = null;
         if (parts.length > 6 && !parts[6].isEmpty()) {
             duration = Duration.ofMinutes(Long.parseLong(parts[6]));
         }
-
-        // Парсим startTime (если не пустая строка)
         LocalDateTime startTime = null;
         if (parts.length > 7 && !parts[7].isEmpty()) {
             startTime = LocalDateTime.parse(parts[7]);
@@ -212,19 +204,21 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         switch (type) {
             case TASK:
                 Task task = new Task(id, name, description, status);
-                task.setDuration(duration);
-                task.setStartTime(startTime);
+                if (duration != null) task.setDuration(duration);
+                if (startTime != null) task.setStartTime(startTime);
                 return task;
             case EPIC:
                 Epic epic = new Epic(id, name, description);
                 epic.setStatus(status);
-                // У эпика время рассчитывается автоматически, не устанавливаем
                 return epic;
             case SUBTASK:
+                if (epicIdStr.isEmpty()) {
+                    throw new IllegalArgumentException("Subtask должна иметь epicId");
+                }
                 int epicId = Integer.parseInt(epicIdStr);
                 Subtask subtask = new Subtask(id, name, description, status, epicId);
-                subtask.setDuration(duration);
-                subtask.setStartTime(startTime);
+                if (duration != null) subtask.setDuration(duration);
+                if (startTime != null) subtask.setStartTime(startTime);
                 return subtask;
             default:
                 throw new IllegalArgumentException("Неизвестный тип задачи: " + type);
