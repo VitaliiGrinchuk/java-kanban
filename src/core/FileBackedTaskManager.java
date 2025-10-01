@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private final File file;
@@ -47,19 +49,19 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     private void save() {
         try {
             List<String> lines = new ArrayList<>();
-            lines.add("id,type,name,status,description,epic");
+            lines.add("id,type,name,status,description,epic,duration,startTime"); // ОБНОВЛЕННЫЙ заголовок
 
-
+            // Сохраняем обычные задачи
             for (Task task : getTasks()) {
                 lines.add(toString(task));
             }
 
-
+            // Сохраняем эпики
             for (Epic epic : getEpics()) {
                 lines.add(toString(epic));
             }
 
-
+            // Сохраняем подзадачи
             for (Subtask subtask : getSubtasks()) {
                 lines.add(toString(subtask));
             }
@@ -76,13 +78,28 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         if (task instanceof Subtask) {
             epicId = String.valueOf(((Subtask) task).getEpicId());
         }
-        return String.format("%d,%s,%s,%s,%s,%s",
+
+        // Преобразуем Duration в минуты (или пустая строка если null)
+        String durationStr = "";
+        if (task.getDuration() != null) {
+            durationStr = String.valueOf(task.getDuration().toMinutes());
+        }
+
+        // Преобразуем LocalDateTime в строку (или пустая строка если null)
+        String startTimeStr = "";
+        if (task.getStartTime() != null) {
+            startTimeStr = task.getStartTime().toString();
+        }
+
+        return String.format("%d,%s,%s,%s,%s,%s,%s,%s",
                 task.getId(),
                 type,
                 task.getTitle(),
                 task.getStatus(),
                 task.getDescription(),
-                epicId);
+                epicId,
+                durationStr,
+                startTimeStr);
     }
 
 
@@ -172,26 +189,45 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     private Task fromString(String value) {
-
         String[] parts = value.split(",");
         int id = Integer.parseInt(parts[0]);
         TaskType type = TaskType.valueOf(parts[1]);
         String name = parts[2];
         Status status = Status.valueOf(parts[3]);
         String description = parts[4];
+        String epicIdStr = parts[5];
+
+        // Парсим duration (если не пустая строка)
+        Duration duration = null;
+        if (parts.length > 6 && !parts[6].isEmpty()) {
+            duration = Duration.ofMinutes(Long.parseLong(parts[6]));
+        }
+
+        // Парсим startTime (если не пустая строка)
+        LocalDateTime startTime = null;
+        if (parts.length > 7 && !parts[7].isEmpty()) {
+            startTime = LocalDateTime.parse(parts[7]);
+        }
 
         switch (type) {
             case TASK:
-                return new Task(id, name, description, status);
+                Task task = new Task(id, name, description, status);
+                task.setDuration(duration);
+                task.setStartTime(startTime);
+                return task;
             case EPIC:
                 Epic epic = new Epic(id, name, description);
                 epic.setStatus(status);
+                // У эпика время рассчитывается автоматически, не устанавливаем
                 return epic;
             case SUBTASK:
-                int epicId = Integer.parseInt(parts[5]);
-                return new Subtask(id, name, description, status, epicId);
+                int epicId = Integer.parseInt(epicIdStr);
+                Subtask subtask = new Subtask(id, name, description, status, epicId);
+                subtask.setDuration(duration);
+                subtask.setStartTime(startTime);
+                return subtask;
             default:
-                throw new IllegalArgumentException("Неизвестный тип: " + type);
+                throw new IllegalArgumentException("Неизвестный тип задачи: " + type);
         }
     }
 }
